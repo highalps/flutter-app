@@ -1,9 +1,10 @@
 /* */
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
 
 /* */
-// import 'widgets/'
+import 'package:flutter_app/providers/navigation.dart';
 
 void main() {
   runApp(App());
@@ -12,30 +13,44 @@ void main() {
 class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        // This makes the visual density adapt to the platform that you run
-        // the app on. For desktop platforms, the controls will be smaller and
-        // closer together (more dense) than on mobile platforms.
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      darkTheme: ThemeData.dark(),
-      builder: (context, child) {
-        return CupertinoTheme(
-          // Instead of letting Cupertino widgets auto-adapt to the Material
-          // theme (which is green), this app will use a different theme
-          // for Cupertino (which is blue by default).
-          data: CupertinoThemeData(),
-          child: Material(child: child),
-        );
-      },
-      home: HomePage(
-        title: '경기 용인시 기흥구 구갈로 28번길 21-11',
-        body: '',
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => NavigationProvider()),
+      ],
+      child: Builder(
+        builder: (context) {
+          return MaterialApp(
+            onGenerateRoute: NavigationProvider.of(context).onGenerateRoute,
+          );
+        },
       ),
     );
+
+
+    // return MaterialApp(
+    //   title: 'Flutter Demo',
+    //   theme: ThemeData(
+    //     primarySwatch: Colors.blue,
+    //     // This makes the visual density adapt to the platform that you run
+    //     // the app on. For desktop platforms, the controls will be smaller and
+    //     // closer together (more dense) than on mobile platforms.
+    //     visualDensity: VisualDensity.adaptivePlatformDensity,
+    //   ),
+    //   darkTheme: ThemeData.dark(),
+    //   builder: (context, child) {
+    //     return CupertinoTheme(
+    //       // Instead of letting Cupertino widgets auto-adapt to the Material
+    //       // theme (which ris green), this app will use a different theme
+    //       // for Cupertino (which is blue by default).
+    //       data: CupertinoThemeData(),
+    //       child: Material(child: child),
+    //     );
+    //   },
+    //   home: HomePage(
+    //     title: '경기 용인시 기흥구 구갈로 28번길 21-11',
+    //     body: ''
+    //   ),
+    // );
   }
 }
 
@@ -80,48 +95,54 @@ class _HomePageState extends State<HomePage> {
           )
         ],
       ),
-      body: Center(
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(widget.body),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        currentIndex: _pageIndex,
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: '홈'),
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: '뭐먹지'),
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: '찜한가게'),
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: '주문내역'),
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'My배민')
+      body: IndexedStack(
+        index: _pageIndex,
+        children: <Widget>[
         ],
-      ),// This trailing comma makes auto-formatting nicer for build methods.
+      ),
+      // body: Center(
+      //   child: Column(
+      //     // Column is also a layout widget. It takes a list of children and
+      //     // arranges them vertically. By default, it sizes itself to fit its
+      //     // children horizontally, and tries to be as tall as its parent.
+      //     //
+      //     // Invoke "debug painting" (press "p" in the console, choose the
+      //     // "Toggle Debug Paint" action from the Flutter Inspector in Android
+      //     // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
+      //     // to see the wireframe for each widget.
+      //     //
+      //     // Column has various properties to control how it sizes itself and
+      //     // how it positions its children. Here we use mainAxisAlignment to
+      //     // center the children vertically; the main axis here is the vertical
+      //     // axis because Columns are vertical (the cross axis would be
+      //     // horizontal).
+      //     mainAxisAlignment: MainAxisAlignment.center,
+      //     children: <Widget>[
+      //       Text(widget.body),
+      //       Text(
+      //         '$_counter',
+      //         style: Theme.of(context).textTheme.headline4,
+      //       ),
+      //     ],
+      //   ),
+      // ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: _incrementCounter,
+      //   tooltip: 'Increment',
+      //   child: Icon(Icons.add),
+      // ),
+      // bottomNavigationBar: BottomNavigationBar(
+      //   type: BottomNavigationBarType.fixed,
+      //   currentIndex: _pageIndex,
+      //   onTap: (int index) => setState(() => _pageIndex = index),
+      //   items: <BottomNavigationBarItem>[
+      //     BottomNavigationBarItem(icon: Icon(Icons.home_rounded), label: '홈'),
+      //     BottomNavigationBarItem(icon: Icon(Icons.ondemand_video_rounded), label: '뭐먹지'),
+      //     BottomNavigationBarItem(icon: Icon(Icons.tour_rounded), label: '찜한가게'),
+      //     BottomNavigationBarItem(icon: Icon(Icons.layers), label: '주문내역'),
+      //     BottomNavigationBarItem(icon: Icon(Icons.child_care_rounded), label: 'My배민')
+      //   ],
+      // ),// This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
